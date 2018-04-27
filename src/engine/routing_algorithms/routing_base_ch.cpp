@@ -194,8 +194,6 @@ double getNetworkDistance(SearchEngineData<Algorithm> &engine_working_data,
         return std::numeric_limits<double>::max();
     }
 
-    BOOST_ASSERT(nodes_number > 0);
-
     EdgeDistance distance = 0;
 
     std::vector<NodeID> unpacked_nodes;
