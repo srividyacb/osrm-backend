@@ -227,6 +227,9 @@ SubMatchingList mapMatching(SearchEngineData<Algorithm> &engine_working_data,
                 {
                     continue;
                 }
+                forward_heap.Clear();
+                const auto& source_phantom = prev_unbroken_timestamps_list[s].phantom_node;
+                insertSourceInHeap(forward_heap, source_phantom);
 
                 for (const auto s_prime : util::irange<std::size_t>(0UL, current_viterbi.size()))
                 {
@@ -237,13 +240,17 @@ SubMatchingList mapMatching(SearchEngineData<Algorithm> &engine_working_data,
                         continue;
                     }
 
+                    reverse_heap.Clear();
+                    const auto &target_phantom = current_timestamps_list[s_prime].phantom_node;
+                    insertTargetInHeap(reverse_heap, target_phantom);
+
                     double network_distance =
                         getNetworkDistance(engine_working_data,
                                            facade,
                                            forward_heap,
                                            reverse_heap,
-                                           prev_unbroken_timestamps_list[s].phantom_node,
-                                           current_timestamps_list[s_prime].phantom_node,
+                                           source_phantom,
+                                           target_phantom,
                                            weight_upper_bound);
 
                     // get distance diff between loc1/2 and locs/s_prime
